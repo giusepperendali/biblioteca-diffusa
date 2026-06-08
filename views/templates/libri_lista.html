@@ -1,0 +1,51 @@
+{# libri_lista.html — Elenco dei libri dell'utente con azioni di gestione. #}
+{% extends "base.html" %}
+
+{% block titolo %}I miei libri &middot; Biblioteca Diffusa{% endblock %}
+
+{% block contenuto %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">I miei libri</h1>
+    <a href="{{ url_for('libri.nuovo') }}" class="btn btn-primary">➕ Aggiungi libro</a>
+</div>
+
+{% if libri %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+    {% for libro in libri %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if libro.copertina %}
+            <img src="{{ url_for('static', filename='uploads/' ~ libro.copertina) }}"
+                 class="card-img-top cover-thumb" alt="Copertina di {{ libro.titolo }}">
+            {% else %}
+            <div class="cover-thumb cover-placeholder">📕</div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title mb-1">{{ libro.titolo }}</h5>
+                <p class="text-muted mb-2">{{ libro.autore }}{% if libro.anno %} &middot; {{ libro.anno }}{% endif %}</p>
+                {% if libro.disponibile %}
+                <span class="badge bg-success">Disponibile</span>
+                {% else %}
+                <span class="badge bg-secondary">Non disponibile</span>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white border-0 d-flex gap-2">
+                <a href="{{ url_for('libri.modifica', libro_id=libro.id) }}"
+                   class="btn btn-sm btn-outline-secondary">✏️ Modifica</a>
+                <form method="post" action="{{ url_for('libri.elimina', libro_id=libro.id) }}"
+                      onsubmit="return confirm('Eliminare definitivamente questo libro?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Elimina</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted py-5">
+    <div class="display-1">📚</div>
+    <p class="mt-3">Non hai ancora aggiunto libri.</p>
+    <a href="{{ url_for('libri.nuovo') }}" class="btn btn-primary">Aggiungi il primo libro</a>
+</div>
+{% endif %}
+{% endblock %}

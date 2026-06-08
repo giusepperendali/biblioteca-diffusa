@@ -19,3 +19,9 @@ class Config:
     MYSQL_USER = os.environ.get("MYSQL_USER", "biblioteca")
     MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "bibliopw")
     MYSQL_DB = os.environ.get("MYSQL_DB", "biblioteca_diffusa")
+
+    # --- Upload delle copertine dei libri (Task T3) ---
+    # Estensioni immagine ammesse e dimensione massima del file caricato.
+    ESTENSIONI_COPERTINA = {"png", "jpg", "jpeg", "gif", "webp"}
+    # Flask rifiuta automaticamente le richieste piu' grandi di MAX_CONTENT_LENGTH.
+    MAX_CONTENT_LENGTH = 4 * 1024 * 1024  # 4 MB

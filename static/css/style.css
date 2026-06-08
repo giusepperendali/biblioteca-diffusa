@@ -45,6 +45,32 @@ main {
     font-size: 1.25rem;
 }
 
+/* --- Miniature delle copertine dei libri ---
+   La "miniatura" e' ottenuta ridimensionando l'immagine in fase di
+   visualizzazione con i CSS (object-fit), senza librerie di elaborazione. */
+.cover-thumb {
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Segnaposto quando il libro non ha copertina */
+.cover-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background-color: #f1f1f1;
+    color: #adb5bd;
+}
+
+/* Anteprima piccola della copertina nel form di modifica */
+.cover-thumb-small {
+    height: 120px;
+    width: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
 /* --- Galleria: immagini con altezza uniforme ed effetto al passaggio del mouse --- */
 .gallery-img {
     width: 100%;
