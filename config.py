@@ -12,8 +12,10 @@ class Config:
 
     # --- Parametri di connessione al database MySQL ---
     # Vengono effettivamente utilizzati a partire dal Task "Database" (T1).
+    # I default coincidono con il servizio MySQL definito in docker-compose.yml,
+    # cosi' l'app si collega senza ulteriore configurazione dopo "docker compose up".
     MYSQL_HOST = os.environ.get("MYSQL_HOST", "localhost")
     MYSQL_PORT = int(os.environ.get("MYSQL_PORT", "3306"))
-    MYSQL_USER = os.environ.get("MYSQL_USER", "root")
-    MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "")
+    MYSQL_USER = os.environ.get("MYSQL_USER", "biblioteca")
+    MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", "bibliopw")
     MYSQL_DB = os.environ.get("MYSQL_DB", "biblioteca_diffusa")

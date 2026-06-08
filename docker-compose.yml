@@ -1,0 +1,37 @@
+# docker-compose.yml — Servizio MySQL per l'applicazione Biblioteca Diffusa.
+#
+# Gli script in ./database vengono montati in /docker-entrypoint-initdb.d:
+# MySQL li esegue automaticamente IN ORDINE ALFABETICO al primo avvio del
+# container (quando il volume dati e' vuoto). In questo modo chiunque cloni il
+# repository e lanci "docker compose up" ottiene il database gia' creato e
+# popolato con i dati di test, senza passaggi manuali.
+#
+# Avvio:   docker compose up -d
+# Stop:    docker compose down
+# Reset:   docker compose down -v   (cancella il volume -> ri-esegue gli script)
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: biblioteca_diffusa_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: biblioteca_diffusa
+      MYSQL_USER: biblioteca
+      MYSQL_PASSWORD: bibliopw
+    ports:
+      - "3306:3306"
+    volumes:
+      # Script di inizializzazione (schema + dati di test), eseguiti al primo avvio
+      - ./database:/docker-entrypoint-initdb.d:ro
+      # Volume persistente per i dati del database
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpw"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:

@@ -3,3 +3,6 @@
 
 # --- T0: Setup ---
 Flask
+
+# --- T1: Database ---
+mysql-connector-python

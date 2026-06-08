@@ -36,8 +36,39 @@ Tutte le tecnologie sono trattate nelle dispense del Corso di Studi.
 │   ├── css/
 │   ├── js/
 │   └── uploads/       # Copertine caricate dagli utenti
-├── database/          # Script SQL (schema e dati di test)
+├── database/          # Script SQL eseguiti all'avvio di MySQL (schema, dati, funzioni)
+├── tests/             # Script di verifica
+├── docker-compose.yml # Servizio MySQL (Docker)
 └── docs/              # Documentazione del Project Work
+```
+
+## Database (MySQL via Docker)
+
+Gli script in `database/` vengono eseguiti automaticamente al **primo avvio** del
+container, in ordine alfabetico:
+
+| File | Contenuto |
+|------|-----------|
+| `01_schema.sql` | Schema: tabelle `utenti`, `libri`, `prestiti` (con colonne `lat`/`lon`) |
+| `02_seed.sql` | Dati di test (6 utenti, 14 libri, 4 prestiti) |
+| `03_haversine.sql` | Funzione SQL `distanza_km()` per la ricerca per distanza |
+
+Avvio del database (chi clona il repository ottiene il DB già popolato):
+
+```powershell
+docker compose up -d      # avvia MySQL e carica schema + dati
+docker compose down       # ferma il container (i dati restano nel volume)
+docker compose down -v    # azzera tutto e ricarica gli script al prossimo avvio
+```
+
+Credenziali di sviluppo (in `docker-compose.yml` e `config.py`): database
+`biblioteca_diffusa`, utente `biblioteca` / `bibliopw` su `localhost:3306`.
+Password di test degli utenti del seed: `password123`.
+
+Verifica rapida del database:
+
+```powershell
+.\.venv\Scripts\python.exe tests\test_t1.py
 ```
 
 ## Avvio in locale
@@ -59,7 +90,7 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 ## Stato di avanzamento
 
 - [x] **T0** — Setup ambiente e struttura MVC
-- [ ] **T1** — Database (schema MySQL + dati di test + Haversine)
+- [x] **T1** — Database (schema MySQL + dati di test + Haversine)
 - [ ] **T2** — Autenticazione e profilo utente
 - [ ] **T3** — Gestione libri e miniature
 - [ ] **T4** — Ricerca testuale e geospaziale
