@@ -28,6 +28,9 @@
                 {% else %}
                 <span class="badge bg-secondary">Non disponibile</span>
                 {% endif %}
+                <div class="small text-muted mt-2">
+                    📍 {{ libro.citta }} &middot; aggiunto il {{ libro.data_inserimento | data_it }}
+                </div>
             </div>
             <div class="card-footer bg-white border-0 d-flex gap-2">
                 <a href="{{ url_for('libri.modifica', libro_id=libro.id) }}"

@@ -63,6 +63,22 @@ main {
     color: #adb5bd;
 }
 
+/* Foto del profilo (tonda) e relativo segnaposto */
+.foto-profilo {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.foto-profilo-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background-color: #f1f1f1;
+}
+
 /* Anteprima piccola della copertina nel form di modifica */
 .cover-thumb-small {
     height: 120px;

@@ -7,12 +7,39 @@
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="d-flex align-items-center mb-4">
-            <span class="display-3 me-3">👤</span>
+            {% if utente.foto %}
+            <img src="{{ url_for('static', filename='uploads/' ~ utente.foto) }}"
+                 class="foto-profilo me-3" alt="Foto profilo di {{ utente.nome }}">
+            {% else %}
+            <span class="foto-profilo foto-profilo-placeholder me-3">👤</span>
+            {% endif %}
             <div>
                 <h1 class="h3 mb-0">{{ utente.nome }} {{ utente.cognome }}</h1>
                 <span class="text-muted">{{ utente.email }}</span>
             </div>
         </div>
+
+        <!-- Caricamento / sostituzione della foto del profilo -->
+        <form method="post" action="{{ url_for('auth.carica_foto') }}"
+              enctype="multipart/form-data" class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <label for="foto" class="form-label mb-2">Foto del profilo</label>
+                <div class="input-group">
+                    <input type="file" class="form-control" id="foto" name="foto"
+                           accept="image/png, image/jpeg, image/gif, image/webp" required>
+                    <button type="submit" class="btn btn-outline-primary">Carica</button>
+                </div>
+                <div class="form-text">Formati: PNG, JPG, GIF, WEBP. Max 4 MB.</div>
+            </div>
+        </form>
+
+        {% if utente.foto %}
+        <!-- Rimozione della foto del profilo (solo se presente) -->
+        <form method="post" action="{{ url_for('auth.rimuovi_foto') }}" class="mb-3"
+              onsubmit="return confirm('Rimuovere la foto del profilo?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Rimuovi foto profilo</button>
+        </form>
+        {% endif %}
 
         <div class="row g-3">
             <div class="col-sm-6">
@@ -37,14 +64,7 @@
             <div class="card-body">
                 <h6 class="text-muted mb-2">Dettagli account</h6>
                 <ul class="list-unstyled mb-0">
-                    <li><strong>Coordinate:</strong>
-                        {% if utente.lat is not none and utente.lon is not none %}
-                            {{ utente.lat }}, {{ utente.lon }}
-                        {% else %}
-                            non impostate
-                        {% endif %}
-                    </li>
-                    <li><strong>Iscritto dal:</strong> {{ utente.data_registrazione }}</li>
+                    <li><strong>Iscritto dal:</strong> {{ utente.data_registrazione | data_it }}</li>
                 </ul>
             </div>
         </div>

@@ -29,6 +29,13 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(libri_bp)
 
+    # Filtro Jinja per mostrare le date nel formato italiano gg/mm/aaaa.
+    @app.template_filter("data_it")
+    def data_it(valore):
+        if valore is None:
+            return ""
+        return valore.strftime("%d/%m/%Y")
+
     return app
 
 

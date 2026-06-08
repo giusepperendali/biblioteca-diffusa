@@ -9,7 +9,7 @@ class Libro:
     """Operazioni di persistenza per la tabella 'libri'."""
 
     @staticmethod
-    def crea(utente_id, titolo, autore, anno, descrizione, copertina, lat, lon):
+    def crea(utente_id, titolo, autore, anno, descrizione, copertina, citta, lat, lon):
         """Inserisce un nuovo libro e ne restituisce l'id."""
         conn = get_connection()
         cur = conn.cursor()
@@ -17,10 +17,10 @@ class Libro:
             cur.execute(
                 """
                 INSERT INTO libri
-                    (utente_id, titolo, autore, anno, descrizione, copertina, lat, lon)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    (utente_id, titolo, autore, anno, descrizione, copertina, citta, lat, lon)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
-                (utente_id, titolo, autore, anno, descrizione, copertina, lat, lon),
+                (utente_id, titolo, autore, anno, descrizione, copertina, citta, lat, lon),
             )
             conn.commit()
             return cur.lastrowid
@@ -56,7 +56,7 @@ class Libro:
             conn.close()
 
     @staticmethod
-    def aggiorna(libro_id, titolo, autore, anno, descrizione, lat, lon, copertina=None):
+    def aggiorna(libro_id, titolo, autore, anno, descrizione, citta, lat, lon, copertina=None):
         """Aggiorna i dati di un libro.
 
         Se 'copertina' e' None la copertina esistente NON viene modificata;
@@ -69,19 +69,19 @@ class Libro:
                 cur.execute(
                     """
                     UPDATE libri
-                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, lat=%s, lon=%s
+                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s, lat=%s, lon=%s
                     WHERE id=%s
                     """,
-                    (titolo, autore, anno, descrizione, lat, lon, libro_id),
+                    (titolo, autore, anno, descrizione, citta, lat, lon, libro_id),
                 )
             else:
                 cur.execute(
                     """
                     UPDATE libri
-                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, lat=%s, lon=%s, copertina=%s
+                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s, lat=%s, lon=%s, copertina=%s
                     WHERE id=%s
                     """,
-                    (titolo, autore, anno, descrizione, lat, lon, copertina, libro_id),
+                    (titolo, autore, anno, descrizione, citta, lat, lon, copertina, libro_id),
                 )
             conn.commit()
         finally:

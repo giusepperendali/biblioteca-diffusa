@@ -76,6 +76,18 @@ class Utente:
         return None
 
     @staticmethod
+    def aggiorna_foto(utente_id, foto):
+        """Imposta il nome del file della foto profilo per l'utente."""
+        conn = get_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute("UPDATE utenti SET foto = %s WHERE id = %s", (foto, utente_id))
+            conn.commit()
+        finally:
+            cur.close()
+            conn.close()
+
+    @staticmethod
     def conta_libri(utente_id):
         """Numero di libri posseduti dall'utente (per la pagina profilo)."""
         conn = get_connection()

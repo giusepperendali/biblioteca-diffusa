@@ -4,6 +4,7 @@
 # e logout. Usa il test client di Flask. Pulisce l'utente creato al termine.
 import sys
 import os
+import io
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -75,6 +76,25 @@ def main():
     client.get("/logout")
     r = client.get("/profilo")
     esiti.append(("logout -> /profilo di nuovo protetto", r.status_code == 302))
+
+    # 10) Upload della foto del profilo
+    client.post("/login", data={"email": "giulia.rossi@example.com", "password": "password123"})
+    client.post("/profilo/foto", data={
+        "foto": (io.BytesIO(b"foto-profilo-di-test"), "avatar.png"),
+    }, content_type="multipart/form-data")
+    giulia = Utente.trova_per_email("giulia.rossi@example.com")
+    foto_ok = bool(giulia["foto"])
+    percorso_foto = os.path.join(app.static_folder, "uploads", giulia["foto"]) if foto_ok else None
+    esiti.append(("upload foto profilo salva il file",
+                  foto_ok and os.path.exists(percorso_foto)))
+
+    # 11) Rimozione della foto del profilo (route dedicata): file + campo DB
+    client.post("/profilo/foto/rimuovi")
+    giulia_dopo = Utente.trova_per_email("giulia.rossi@example.com")
+    foto_rimossa = (giulia_dopo["foto"] is None
+                    and percorso_foto is not None
+                    and not os.path.exists(percorso_foto))
+    esiti.append(("rimozione foto profilo (file + DB)", foto_rimossa))
 
     # Pulizia
     elimina_utente(EMAIL_TEST)

@@ -23,6 +23,8 @@ CREATE TABLE IF NOT EXISTS utenti (
     -- Posizione di riferimento dell'utente (per centratura mappa).
     lat                 DECIMAL(9, 6),
     lon                 DECIMAL(9, 6),
+    -- Nome file della foto del profilo (in static/uploads), facoltativa.
+    foto                VARCHAR(255),
     data_registrazione  TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -41,6 +43,9 @@ CREATE TABLE IF NOT EXISTS libri (
     descrizione         TEXT,
     -- Nome file della copertina/miniatura salvata in static/uploads (Task T3).
     copertina           VARCHAR(255),
+    -- Citta' in cui si trova il libro (scelta dall'utente); da essa si ricavano
+    -- le coordinate lat/lon usate per la ricerca geospaziale.
+    citta               VARCHAR(100)    NOT NULL,
     lat                 DECIMAL(9, 6)   NOT NULL,
     lon                 DECIMAL(9, 6)   NOT NULL,
     disponibile         BOOLEAN         NOT NULL DEFAULT TRUE,

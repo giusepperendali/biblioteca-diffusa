@@ -8,6 +8,7 @@ from flask import (
 )
 
 from models.utente import Utente
+from immagini import salva_immagine, rimuovi_immagine
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -82,3 +83,37 @@ def profilo():
     utente = Utente.trova_per_id(session["utente_id"])
     num_libri = Utente.conta_libri(utente["id"])
     return render_template("profilo.html", utente=utente, num_libri=num_libri)
+
+
+@auth_bp.route("/profilo/foto", methods=["POST"])
+@login_richiesto
+def carica_foto():
+    """Carica o sostituisce la foto del profilo dell'utente."""
+    utente = Utente.trova_per_id(session["utente_id"])
+    try:
+        nuova_foto = salva_immagine(request.files.get("foto"))
+    except ValueError as e:
+        flash(str(e), "danger")
+        return redirect(url_for("auth.profilo"))
+
+    if nuova_foto is None:
+        flash("Seleziona un'immagine da caricare.", "warning")
+        return redirect(url_for("auth.profilo"))
+
+    # Rimuove la foto precedente, se presente, e salva la nuova
+    rimuovi_immagine(utente["foto"])
+    Utente.aggiorna_foto(utente["id"], nuova_foto)
+    flash("Foto del profilo aggiornata.", "success")
+    return redirect(url_for("auth.profilo"))
+
+
+@auth_bp.route("/profilo/foto/rimuovi", methods=["POST"])
+@login_richiesto
+def rimuovi_foto():
+    """Rimuove la foto del profilo dell'utente (file + riferimento nel DB)."""
+    utente = Utente.trova_per_id(session["utente_id"])
+    if utente["foto"]:
+        rimuovi_immagine(utente["foto"])
+        Utente.aggiorna_foto(utente["id"], None)
+        flash("Foto del profilo rimossa.", "info")
+    return redirect(url_for("auth.profilo"))

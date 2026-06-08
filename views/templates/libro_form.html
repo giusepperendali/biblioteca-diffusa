@@ -41,25 +41,24 @@
                           rows="3">{{ libro.descrizione or '' }}</textarea>
             </div>
 
-            <div class="row">
-                <div class="col-sm-6 mb-3">
-                    <label for="lat" class="form-label">Latitudine <span class="text-danger">*</span></label>
-                    <input type="number" step="any" class="form-control" id="lat" name="lat"
-                           value="{{ libro.lat if libro.lat is not none else '' }}" required>
-                </div>
-                <div class="col-sm-6 mb-3">
-                    <label for="lon" class="form-label">Longitudine <span class="text-danger">*</span></label>
-                    <input type="number" step="any" class="form-control" id="lon" name="lon"
-                           value="{{ libro.lon if libro.lon is not none else '' }}" required>
+            <div class="mb-3">
+                <label for="citta" class="form-label">Citt&agrave; <span class="text-danger">*</span></label>
+                <select class="form-select" id="citta" name="citta" required>
+                    <option value="" disabled {{ 'selected' if not libro.citta else '' }}>
+                        Scegli una citt&agrave;…
+                    </option>
+                    {% for c in citta_disponibili %}
+                    <option value="{{ c }}" {{ 'selected' if libro.citta == c else '' }}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">
+                    Indica dove si trova il libro: dalla citt&agrave; il sistema ricava la
+                    posizione sulla mappa e la usa per la ricerca per distanza.
                 </div>
             </div>
-            <p class="form-text mt-0 mb-3">
-                Posizione in cui si trova il libro. La selezione sulla mappa sar&agrave;
-                disponibile in un task successivo.
-            </p>
 
             <div class="mb-3">
-                <label for="copertina" class="form-label">Copertina</label>
+                <label for="copertina" class="form-label">Foto della copertina</label>
                 {% if azione == 'modifica' and libro.copertina %}
                 <div class="mb-2">
                     <img src="{{ url_for('static', filename='uploads/' ~ libro.copertina) }}"

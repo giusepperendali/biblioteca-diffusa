@@ -38,7 +38,7 @@ def main():
     # 3) Creazione libro senza copertina
     r = client.post("/libri/nuovo", data={
         "titolo": "Libro Test T3", "autore": "Autore Test",
-        "anno": "2020", "lat": "41.9", "lon": "12.5",
+        "anno": "2020", "citta": "Roma",
     })
     creato = next((l for l in Libro.trova_per_utente(giulia["id"]) if l["titolo"] == "Libro Test T3"), None)
     esiti.append(("creazione libro", r.status_code == 302 and creato is not None
@@ -46,7 +46,7 @@ def main():
 
     # 4) Creazione libro CON copertina (upload file)
     r = client.post("/libri/nuovo", data={
-        "titolo": "Libro Con Copertina", "autore": "A", "lat": "41.9", "lon": "12.5",
+        "titolo": "Libro Con Copertina", "autore": "A", "citta": "Roma",
         "copertina": (io.BytesIO(b"contenuto-immagine-di-test"), "cover.png"),
     }, content_type="multipart/form-data")
     con_cop = next((l for l in Libro.trova_per_utente(giulia["id"]) if l["titolo"] == "Libro Con Copertina"), None)
@@ -57,7 +57,7 @@ def main():
 
     # 5) Estensione non ammessa -> rifiutata, nessun libro creato
     r = client.post("/libri/nuovo", data={
-        "titolo": "Libro Bad", "autore": "A", "lat": "41.9", "lon": "12.5",
+        "titolo": "Libro Bad", "autore": "A", "citta": "Roma",
         "copertina": (io.BytesIO(b"x"), "file.exe"),
     }, content_type="multipart/form-data")
     bad = any(l["titolo"] == "Libro Bad" for l in Libro.trova_per_utente(giulia["id"]))
@@ -66,7 +66,7 @@ def main():
     # 6) Modifica del libro
     r = client.post("/libri/%d/modifica" % creato["id"], data={
         "titolo": "Libro Test T3 Modificato", "autore": "Autore Test",
-        "lat": "41.9", "lon": "12.5",
+        "citta": "Roma",
     })
     mod = Libro.trova_per_id(creato["id"])
     esiti.append(("modifica libro", r.status_code == 302 and mod["titolo"] == "Libro Test T3 Modificato"))
@@ -75,7 +75,7 @@ def main():
     client2 = app.test_client()
     _login(client2, "marco.bianchi@example.com", "password123")
     r = client2.post("/libri/%d/modifica" % creato["id"], data={
-        "titolo": "hack", "autore": "x", "lat": "1", "lon": "1",
+        "titolo": "hack", "autore": "x", "citta": "Roma",
     })
     esiti.append(("altro utente non puo' modificare (403)", r.status_code == 403))
 
