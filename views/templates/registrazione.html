@@ -9,10 +9,17 @@
         <h1 class="h3 mb-4 text-center">Crea il tuo account</h1>
 
         <form method="post" action="{{ url_for('auth.registrazione') }}">
-            <div class="mb-3">
-                <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="nome" name="nome"
-                       value="{{ nome or '' }}" required>
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nome" name="nome"
+                           value="{{ nome or '' }}" required>
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label for="cognome" class="form-label">Cognome <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="cognome" name="cognome"
+                           value="{{ cognome or '' }}" required>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email <span class="text-danger">*</span></label>

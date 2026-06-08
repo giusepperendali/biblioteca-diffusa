@@ -15,6 +15,7 @@ SET NAMES utf8mb4;
 CREATE TABLE IF NOT EXISTS utenti (
     id                  INT AUTO_INCREMENT PRIMARY KEY,
     nome                VARCHAR(100)    NOT NULL,
+    cognome             VARCHAR(100)    NOT NULL,
     email               VARCHAR(150)    NOT NULL UNIQUE,
     -- Hash SHA-256 della password in esadecimale (64 caratteri) -> Task T2.
     password_hash       CHAR(64)        NOT NULL,

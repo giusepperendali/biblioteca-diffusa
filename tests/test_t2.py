@@ -55,7 +55,7 @@ def main():
     # 6) Registrazione di un nuovo utente
     elimina_utente(EMAIL_TEST)  # pulizia preventiva
     r = client.post("/registrazione", data={
-        "nome": "Utente Prova", "email": EMAIL_TEST,
+        "nome": "Utente", "cognome": "Prova", "email": EMAIL_TEST,
         "password": "segreta456", "citta": "Genova",
     })
     creato = Utente.trova_per_email(EMAIL_TEST)

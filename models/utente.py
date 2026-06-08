@@ -22,7 +22,7 @@ class Utente:
     """Operazioni di persistenza per la tabella 'utenti'."""
 
     @staticmethod
-    def crea(nome, email, password, citta=None, lat=None, lon=None):
+    def crea(nome, cognome, email, password, citta=None, lat=None, lon=None):
         """Inserisce un nuovo utente memorizzando l'hash della password.
 
         Restituisce l'id del nuovo utente.
@@ -32,10 +32,10 @@ class Utente:
         try:
             cur.execute(
                 """
-                INSERT INTO utenti (nome, email, password_hash, citta, lat, lon)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO utenti (nome, cognome, email, password_hash, citta, lat, lon)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """,
-                (nome, email, hash_password(password), citta, lat, lon),
+                (nome, cognome, email, hash_password(password), citta, lat, lon),
             )
             conn.commit()
             return cur.lastrowid

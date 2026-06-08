@@ -27,21 +27,22 @@ def login_richiesto(view):
 def registrazione():
     if request.method == "POST":
         nome = request.form.get("nome", "").strip()
+        cognome = request.form.get("cognome", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         citta = request.form.get("citta", "").strip() or None
 
         # Validazione minima dei campi obbligatori
-        if not nome or not email or not password:
-            flash("Nome, email e password sono obbligatori.", "danger")
-            return render_template("registrazione.html", nome=nome, email=email, citta=citta)
+        if not nome or not cognome or not email or not password:
+            flash("Nome, cognome, email e password sono obbligatori.", "danger")
+            return render_template("registrazione.html", nome=nome, cognome=cognome, email=email, citta=citta)
 
         # L'email deve essere univoca
         if Utente.trova_per_email(email):
             flash("Questa email risulta gia' registrata.", "danger")
-            return render_template("registrazione.html", nome=nome, citta=citta)
+            return render_template("registrazione.html", nome=nome, cognome=cognome, citta=citta)
 
-        Utente.crea(nome, email, password, citta)
+        Utente.crea(nome, cognome, email, password, citta)
         flash("Registrazione completata! Ora puoi accedere.", "success")
         return redirect(url_for("auth.login"))
 

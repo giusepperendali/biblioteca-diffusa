@@ -14,13 +14,13 @@ SET NAMES utf8mb4;
 -- ---------------------------------------------------------------------------
 -- UTENTI (id 1..6)
 -- ---------------------------------------------------------------------------
-INSERT INTO utenti (nome, email, password_hash, citta, lat, lon) VALUES
-('Giulia Rossi',    'giulia.rossi@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Roma',    41.902800, 12.496400),
-('Marco Bianchi',   'marco.bianchi@example.com',   'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Milano',  45.464200,  9.190000),
-('Sofia Esposito',  'sofia.esposito@example.com',  'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Napoli',  40.851800, 14.268100),
-('Luca Ferrari',    'luca.ferrari@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Torino',  45.070300,  7.686900),
-('Elena Conti',     'elena.conti@example.com',     'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Firenze', 43.769600, 11.255800),
-('Davide Greco',    'davide.greco@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Bologna', 44.494900, 11.342600);
+INSERT INTO utenti (nome, cognome, email, password_hash, citta, lat, lon) VALUES
+('Giulia',  'Rossi',    'giulia.rossi@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Roma',    41.902800, 12.496400),
+('Marco',   'Bianchi',  'marco.bianchi@example.com',   'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Milano',  45.464200,  9.190000),
+('Sofia',   'Esposito', 'sofia.esposito@example.com',  'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Napoli',  40.851800, 14.268100),
+('Luca',    'Ferrari',  'luca.ferrari@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Torino',  45.070300,  7.686900),
+('Elena',   'Conti',    'elena.conti@example.com',     'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Firenze', 43.769600, 11.255800),
+('Davide',  'Greco',    'davide.greco@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Bologna', 44.494900, 11.342600);
 
 -- ---------------------------------------------------------------------------
 -- LIBRI (id 1..14) — geolocalizzati nei pressi della citta' del proprietario
