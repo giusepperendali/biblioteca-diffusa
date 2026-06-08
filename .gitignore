@@ -1,0 +1,32 @@
+# --- Ambiente virtuale Python ---
+.venv/
+venv/
+env/
+
+# --- Cache e file compilati Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --- Configurazione locale / segreti ---
+.env
+
+# --- Materiale didattico e documenti di lavoro (non parte del prototipo) ---
+dispense/
+_doc2_media/
+*.docx
+
+# --- File caricati dagli utenti in locale (copertine libri) ---
+static/uploads/*
+!static/uploads/.gitkeep
+
+# --- Certificati TLS locali (generati per HTTPS in sviluppo) ---
+*.pem
+*.crt
+*.key
+
+# --- IDE / sistema operativo ---
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

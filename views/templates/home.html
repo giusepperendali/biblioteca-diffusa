@@ -1,0 +1,102 @@
+{# home.html — Pagina iniziale. Estende base.html. #}
+{% extends "base.html" %}
+
+{% block titolo %}Home &middot; Biblioteca Diffusa{% endblock %}
+
+{# ---- Sezione hero a tutta larghezza, con foto di libreria sullo sfondo ---- #}
+{% block contenuto_full %}
+<section class="hero text-white d-flex align-items-center">
+    <div class="container text-center py-5">
+        <h1 class="display-3 fw-bold mb-3">Condividi il tuo patrimonio librario</h1>
+        <p class="lead col-lg-8 mx-auto mb-4">
+            <span class="brand">Biblioteca Diffusa</span> mappa i libri delle persone sul territorio e li rende
+            accessibili alla comunità: una rete culturale fatta di scaffali privati
+            aperti al prestito.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="#come-funziona" class="btn btn-light btn-lg px-4">
+                <i class="bi bi-compass"></i> Scopri come funziona
+            </a>
+            <a href="#galleria" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-images"></i> Sfoglia
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{# ---- Contenuto incolonnato ---- #}
+{% block contenuto %}
+
+<!-- Sezione: come funziona -->
+<section id="come-funziona" class="py-4">
+    <h2 class="text-center fw-bold mb-5">Come funziona</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <i class="bi bi-journal-bookmark-fill display-4 text-primary"></i>
+                    <h5 class="card-title mt-3">Cataloga i tuoi libri</h5>
+                    <p class="card-text text-muted">
+                        Aggiungi i volumi della tua libreria con titolo, autore e
+                        copertina, generando in automatico le miniature.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <i class="bi bi-geo-alt-fill display-4 text-primary"></i>
+                    <h5 class="card-title mt-3">Geolocalizza</h5>
+                    <p class="card-text text-muted">
+                        Ogni libro è collocato sulla mappa: trova i volumi più vicini
+                        a te grazie alla ricerca per distanza.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card-body p-4">
+                    <i class="bi bi-people-fill display-4 text-primary"></i>
+                    <h5 class="card-title mt-3">Condividi e presta</h5>
+                    <p class="card-text text-muted">
+                        Consulta la scheda di un libro e invia una richiesta di
+                        prestito agli altri utenti della rete.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sezione: galleria -->
+<section id="galleria" class="py-5">
+    <h2 class="text-center fw-bold mb-5">Una comunità di lettori</h2>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/scaffale.jpg') }}"
+                 class="img-fluid rounded shadow-sm gallery-img"
+                 alt="Scaffale di una libreria">
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/libri-pila.jpg') }}"
+                 class="img-fluid rounded shadow-sm gallery-img"
+                 alt="Pila di libri">
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/lettura.jpg') }}"
+                 class="img-fluid rounded shadow-sm gallery-img"
+                 alt="Persona che legge un libro">
+        </div>
+    </div>
+</section>
+
+<!-- Nota di stato del prototipo -->
+<p class="text-center text-muted small mt-3">
+    Setup iniziale completato (Task&nbsp;T0). Le funzionalità — profilo, gestione
+    libri, ricerca, mappa, prestiti e statistiche — verranno aggiunte nei task successivi.
+</p>
+
+{% endblock %}

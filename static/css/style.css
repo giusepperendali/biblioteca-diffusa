@@ -1,0 +1,56 @@
+/* style.css — Stili personalizzati dell'applicazione Biblioteca Diffusa.
+   Si appoggia a Bootstrap; qui si raccolgono solo le personalizzazioni. */
+
+:root {
+    /* Colore identitario del progetto: oro caldo, richiama carta e cultura */
+    --brand-color: #d6a447;
+}
+
+/* --- Identità del nome "Biblioteca Diffusa": font con grazie + colore oro --- */
+.brand {
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    color: var(--brand-color);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Mantiene il colore identitario anche al passaggio del mouse sul brand in navbar */
+.navbar-brand.brand:hover {
+    color: #e6b860;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* --- Hero: foto di libreria a tutta larghezza con velo scuro per leggibilità --- */
+.hero {
+    min-height: 70vh;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+        url("../img/hero-libreria.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero .lead {
+    font-size: 1.25rem;
+}
+
+/* --- Galleria: immagini con altezza uniforme ed effetto al passaggio del mouse --- */
+.gallery-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    transition: transform 0.25s ease;
+}
+
+.gallery-img:hover {
+    transform: scale(1.03);
+}

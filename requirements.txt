@@ -1,0 +1,5 @@
+# Dipendenze Python del progetto.
+# Le librerie verranno aggiunte progressivamente con l'avanzare dei task.
+
+# --- T0: Setup ---
+Flask
