@@ -11,6 +11,9 @@ __pycache__/
 # --- Configurazione locale / segreti ---
 .env
 
+# --- File temporaneo per i messaggi di commit (uso interno) ---
+COMMIT_MSG_TMP.txt
+
 # --- Materiale didattico e documenti di lavoro (non parte del prototipo) ---
 dispense/
 _doc2_media/
