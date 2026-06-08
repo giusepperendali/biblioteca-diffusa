@@ -6,9 +6,11 @@
     --brand-color: #d6a447;
 }
 
-/* --- Identità del nome "Biblioteca Diffusa": font con grazie + colore oro --- */
+/* --- Identità del nome "Biblioteca Diffusa": font con grazie di sistema + colore oro.
+   Si usa uno stack di font serif già presenti sui sistemi operativi (nessuna
+   dipendenza esterna), per distinguere il nome dal resto dell'interfaccia. --- */
 .brand {
-    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-family: Georgia, "Times New Roman", "DejaVu Serif", serif;
     color: var(--brand-color);
     font-weight: 700;
     letter-spacing: 0.5px;

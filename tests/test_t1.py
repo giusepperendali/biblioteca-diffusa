@@ -23,15 +23,24 @@ def main():
         cur.execute("SELECT COUNT(*) AS n FROM " + tabella)
         print(f"  {tabella:10}: {cur.fetchone()['n']}")
 
-    print("\n--- Libri entro 100 km dal centro di Roma (Haversine SQL) ---")
+    print("\n--- Libri entro 100 km dal centro di Roma (Haversine SQL inline) ---")
+    # Formula di Haversine espressa direttamente nella query SELECT
+    # (raggio terrestre 6371 km). LEAST(1.0, ...) protegge ACOS dagli
+    # arrotondamenti in virgola mobile.
     cur.execute(
         """
-        SELECT titolo, lat, lon, ROUND(distanza_km(%s, %s, lat, lon), 2) AS km
+        SELECT titolo, lat, lon,
+               ROUND(6371 * ACOS(
+                   LEAST(1.0,
+                       COS(RADIANS(%s)) * COS(RADIANS(lat)) * COS(RADIANS(lon) - RADIANS(%s))
+                       + SIN(RADIANS(%s)) * SIN(RADIANS(lat))
+                   )
+               ), 2) AS km
         FROM libri
         HAVING km <= 100
         ORDER BY km
         """,
-        ROMA,
+        (ROMA[0], ROMA[1], ROMA[0]),
     )
     righe = cur.fetchall()
     for r in righe:

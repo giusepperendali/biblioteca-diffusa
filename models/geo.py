@@ -1,7 +1,8 @@
 # models/geo.py — Utilita' geospaziali lato Python.
-# Implementazione della formula di Haversine in Python, equivalente alla
-# funzione SQL distanza_km (vedi database/03_haversine.sql). E' utile quando il
-# calcolo va fatto in applicazione anziche' nella query (Programmazione 2).
+# Implementazione della formula di Haversine in Python (Programmazione 2),
+# equivalente alla stessa formula usata inline nelle query SQL per la ricerca
+# per distanza (Basi di Dati). Utile quando il calcolo va fatto in applicazione
+# anziche' nella query.
 import math
 
 RAGGIO_TERRA_KM = 6371.0  # raggio medio terrestre in chilometri

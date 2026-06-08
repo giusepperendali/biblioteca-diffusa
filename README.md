@@ -42,18 +42,25 @@ Tutte le tecnologie sono trattate nelle dispense del Corso di Studi.
 └── docs/              # Documentazione del Project Work
 ```
 
-## Database (MySQL via Docker)
+## Database (MySQL)
 
-Gli script in `database/` vengono eseguiti automaticamente al **primo avvio** del
-container, in ordine alfabetico:
+Lo schema e i dati di test sono in `database/`:
 
 | File | Contenuto |
 |------|-----------|
 | `01_schema.sql` | Schema: tabelle `utenti`, `libri`, `prestiti` (con colonne `lat`/`lon`) |
 | `02_seed.sql` | Dati di test (6 utenti, 14 libri, 4 prestiti) |
-| `03_haversine.sql` | Funzione SQL `distanza_km()` per la ricerca per distanza |
 
-Avvio del database (chi clona il repository ottiene il DB già popolato):
+> La ricerca per distanza usa la **formula di Haversine** applicata direttamente
+> nelle query SQL (vedi `tests/test_t1.py`) e, lato applicazione, la funzione
+> Python `models/geo.py`.
+
+Sono possibili due modi per avere il database in locale.
+
+### Opzione A — Docker (rapido)
+
+Gli script in `database/` vengono eseguiti automaticamente al **primo avvio** del
+container, così chi clona il repository ottiene il DB già popolato:
 
 ```powershell
 docker compose up -d      # avvia MySQL e carica schema + dati
@@ -61,7 +68,22 @@ docker compose down       # ferma il container (i dati restano nel volume)
 docker compose down -v    # azzera tutto e ricarica gli script al prossimo avvio
 ```
 
-Credenziali di sviluppo (in `docker-compose.yml` e `config.py`): database
+### Opzione B — MySQL installato sul sistema (come da dispensa)
+
+Installare **MySQL Community Server** con il *MySQL Installer for Windows*
+(procedura della dispensa "Configurazione e uso di un database MySQL con Python").
+Poi creare database, utente e caricare gli script:
+
+```sql
+CREATE DATABASE biblioteca_diffusa;
+CREATE USER 'biblioteca'@'localhost' IDENTIFIED BY 'bibliopw';
+GRANT ALL ON biblioteca_diffusa.* TO 'biblioteca'@'localhost';
+USE biblioteca_diffusa;
+SOURCE database/01_schema.sql;
+SOURCE database/02_seed.sql;
+```
+
+In entrambi i casi i parametri di connessione (in `config.py`) sono: database
 `biblioteca_diffusa`, utente `biblioteca` / `bibliopw` su `localhost:3306`.
 Password di test degli utenti del seed: `password123`.
 

@@ -7,7 +7,7 @@
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="d-flex align-items-center mb-4">
-            <i class="bi bi-person-circle display-3 text-secondary me-3"></i>
+            <span class="display-3 me-3">👤</span>
             <div>
                 <h1 class="h3 mb-0">{{ utente.nome }} {{ utente.cognome }}</h1>
                 <span class="text-muted">{{ utente.email }}</span>
@@ -18,7 +18,7 @@
             <div class="col-sm-6">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h6 class="text-muted mb-1"><i class="bi bi-geo-alt"></i> Citt&agrave;</h6>
+                        <h6 class="text-muted mb-1">📍 Citt&agrave;</h6>
                         <p class="mb-0 fs-5">{{ utente.citta or 'Non indicata' }}</p>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
             <div class="col-sm-6">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <h6 class="text-muted mb-1"><i class="bi bi-journal-bookmark"></i> Libri condivisi</h6>
+                        <h6 class="text-muted mb-1">📚 Libri condivisi</h6>
                         <p class="mb-0 fs-5">{{ num_libri }}</p>
                     </div>
                 </div>
