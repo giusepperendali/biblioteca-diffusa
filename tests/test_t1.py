@@ -16,7 +16,7 @@ ROMA = (41.9028, 12.4964)
 
 def main():
     conn = get_connection()
-    cur = conn.cursor(dictionary=True)
+    cur = conn.cursor()
 
     print("--- Conteggio righe ---")
     for tabella in ("utenti", "libri", "prestiti"):

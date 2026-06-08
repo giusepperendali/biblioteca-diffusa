@@ -47,7 +47,7 @@ class Utente:
     def trova_per_email(email):
         """Restituisce l'utente con l'email indicata (dict) o None."""
         conn = get_connection()
-        cur = conn.cursor(dictionary=True)
+        cur = conn.cursor()
         try:
             cur.execute("SELECT * FROM utenti WHERE email = %s", (email,))
             return cur.fetchone()
@@ -59,7 +59,7 @@ class Utente:
     def trova_per_id(utente_id):
         """Restituisce l'utente con l'id indicato (dict) o None."""
         conn = get_connection()
-        cur = conn.cursor(dictionary=True)
+        cur = conn.cursor()
         try:
             cur.execute("SELECT * FROM utenti WHERE id = %s", (utente_id,))
             return cur.fetchone()
@@ -81,8 +81,8 @@ class Utente:
         conn = get_connection()
         cur = conn.cursor()
         try:
-            cur.execute("SELECT COUNT(*) FROM libri WHERE utente_id = %s", (utente_id,))
-            return cur.fetchone()[0]
+            cur.execute("SELECT COUNT(*) AS n FROM libri WHERE utente_id = %s", (utente_id,))
+            return cur.fetchone()["n"]
         finally:
             cur.close()
             conn.close()

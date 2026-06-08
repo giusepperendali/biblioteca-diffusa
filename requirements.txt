@@ -5,4 +5,6 @@
 Flask
 
 # --- T1: Database ---
-mysql-connector-python
+# Driver MySQL per Python come da dispensa "Configurazione e uso di un database
+# MySQL con Python" (Programmazione 2), che utilizza il modulo pymysql.
+PyMySQL
