@@ -91,7 +91,7 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 
 - [x] **T0** — Setup ambiente e struttura MVC
 - [x] **T1** — Database (schema MySQL + dati di test + Haversine)
-- [ ] **T2** — Autenticazione e profilo utente
+- [x] **T2** — Autenticazione e profilo utente (registrazione/login, hashing SHA-256, sessioni)
 - [ ] **T3** — Gestione libri e miniature
 - [ ] **T4** — Ricerca testuale e geospaziale
 - [ ] **T5** — Mappa (Leaflet)

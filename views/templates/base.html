@@ -33,11 +33,53 @@
             <a class="navbar-brand brand fs-3" href="{{ url_for('main.home') }}">
                 📚 Biblioteca Diffusa
             </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navContenuto" aria-controls="navContenuto"
+                    aria-expanded="false" aria-label="Apri menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContenuto">
+                <ul class="navbar-nav ms-auto">
+                    {% if session.utente_id %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.profilo') }}">
+                            <i class="bi bi-person-circle"></i> {{ session.utente_nome }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Esci
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Accedi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth.registrazione') }}">Registrati</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
 
     <!-- Contenuto specifico della pagina -->
     <main>
+        {# Messaggi flash (esiti di registrazione, login, logout, ecc.) #}
+        {% with messaggi = get_flashed_messages(with_categories=true) %}
+            {% if messaggi %}
+            <div class="container mt-3">
+                {% for categoria, testo in messaggi %}
+                <div class="alert alert-{{ categoria }} alert-dismissible fade show" role="alert">
+                    {{ testo }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+
         {# Sezioni a tutta larghezza (es. hero con immagine di sfondo) #}
         {% block contenuto_full %}{% endblock %}
         {# Contenuto incolonnato nel contenitore Bootstrap #}

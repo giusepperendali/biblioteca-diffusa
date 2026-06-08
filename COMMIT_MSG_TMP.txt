@@ -1,0 +1,14 @@
+T2: autenticazione e profilo utente
+
+- models/utente.py: Model Utente con hashing password SHA-256 (Cybersecurity),
+  crea/trova_per_email/trova_per_id/verifica_credenziali/conta_libri
+- controllers/auth.py: Blueprint con registrazione, login, logout, profilo;
+  sessione Flask e decoratore login_richiesto per le rotte protette
+- views: registrazione.html, login.html, profilo.html
+- base.html: navbar dinamica (login/logout/profilo da sessione) + messaggi flash
+- app.py: registrazione del Blueprint auth
+- tests/test_t2.py: 9 verifiche (hashing, login seed, rotta protetta,
+  registrazione, password mai in chiaro, logout) - tutte superate
+- README: T2 segnato come completato
+
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>

@@ -6,6 +6,7 @@
 from flask import Flask
 
 from controllers.main import main_bp
+from controllers.auth import auth_bp
 
 
 def create_app():
@@ -24,6 +25,7 @@ def create_app():
 
     # Registrazione dei Blueprint (un modulo Controller per area funzionale)
     app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
 
     return app
 

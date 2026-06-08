@@ -1,0 +1,57 @@
+{# profilo.html — Pagina del profilo utente (accessibile solo se autenticati). #}
+{% extends "base.html" %}
+
+{% block titolo %}Profilo &middot; Biblioteca Diffusa{% endblock %}
+
+{% block contenuto %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+            <i class="bi bi-person-circle display-3 text-secondary me-3"></i>
+            <div>
+                <h1 class="h3 mb-0">{{ utente.nome }}</h1>
+                <span class="text-muted">{{ utente.email }}</span>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-1"><i class="bi bi-geo-alt"></i> Citt&agrave;</h6>
+                        <p class="mb-0 fs-5">{{ utente.citta or 'Non indicata' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="text-muted mb-1"><i class="bi bi-journal-bookmark"></i> Libri condivisi</h6>
+                        <p class="mb-0 fs-5">{{ num_libri }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mt-3">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">Dettagli account</h6>
+                <ul class="list-unstyled mb-0">
+                    <li><strong>Coordinate:</strong>
+                        {% if utente.lat is not none and utente.lon is not none %}
+                            {{ utente.lat }}, {{ utente.lon }}
+                        {% else %}
+                            non impostate
+                        {% endif %}
+                    </li>
+                    <li><strong>Iscritto dal:</strong> {{ utente.data_registrazione }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="text-muted small mt-3">
+            La gestione dei libri (aggiunta, copertine) sar&agrave; disponibile dal Task&nbsp;T3.
+        </p>
+    </div>
+</div>
+{% endblock %}

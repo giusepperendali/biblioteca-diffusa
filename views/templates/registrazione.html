@@ -1,0 +1,40 @@
+{# registrazione.html — Form di registrazione di un nuovo utente. #}
+{% extends "base.html" %}
+
+{% block titolo %}Registrazione &middot; Biblioteca Diffusa{% endblock %}
+
+{% block contenuto %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <h1 class="h3 mb-4 text-center">Crea il tuo account</h1>
+
+        <form method="post" action="{{ url_for('auth.registrazione') }}">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="nome" name="nome"
+                       value="{{ nome or '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="email" name="email"
+                       value="{{ email or '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="citta" class="form-label">Citt&agrave;</label>
+                <input type="text" class="form-control" id="citta" name="citta"
+                       value="{{ citta or '' }}">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrati</button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Hai gi&agrave; un account?
+            <a href="{{ url_for('auth.login') }}">Accedi</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
