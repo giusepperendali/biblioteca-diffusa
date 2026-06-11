@@ -116,7 +116,7 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 - [x] **T2** — Autenticazione e profilo utente (registrazione/login, hashing SHA-256, sessioni)
 - [x] **T3** — Gestione libri e miniature (CRUD, upload copertina, miniatura via CSS)
 - [x] **T4** — Ricerca testuale e geospaziale (LIKE su titolo/autore, Haversine inline in SQL)
-- [ ] **T5** — Mappa (Leaflet)
+- [x] **T5** — Mappa (Leaflet, marcatori raggruppati per posizione)
 - [ ] **T6** — Dettaglio libro e richiesta di prestito
 - [ ] **T7** — Dashboard statistiche
 - [ ] **T8** — Sicurezza (HTTPS/TLS)

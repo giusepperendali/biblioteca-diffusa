@@ -1,0 +1,35 @@
+{# mappa.html — Mappa dei libri condivisi (Leaflet).
+   I dati dei marcatori sono preparati dal Controller e passati al JavaScript
+   tramite il filtro Jinja "tojson"; la logica della mappa sta in
+   static/js/mappa.js. #}
+{% extends "base.html" %}
+
+{% block titolo %}Mappa &middot; Biblioteca Diffusa{% endblock %}
+
+{# CSS di Leaflet (libreria di mappe, caricata da CDN) #}
+{% block testa %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+
+{% block contenuto %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1 class="h3 mb-0">Mappa dei libri</h1>
+    <span class="text-muted">{{ totale_libri }} libri sulla mappa</span>
+</div>
+<p class="text-muted">
+    Ogni città ha un segnaposto con il numero di libri presenti:
+    selezionalo per vederne l'elenco.
+</p>
+
+<div id="mappa" class="rounded shadow-sm"></div>
+{% endblock %}
+
+{# Libreria Leaflet + dati dei marcatori + script della mappa #}
+{% block script %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Marcatori generati lato server (Controller) e letti da mappa.js
+    const MARCATORI = {{ marcatori | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/mappa.js') }}"></script>
+{% endblock %}

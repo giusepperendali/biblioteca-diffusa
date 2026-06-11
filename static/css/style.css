@@ -87,6 +87,48 @@ main {
     border-radius: 4px;
 }
 
+/* --- Mappa dei libri (Leaflet): altezza esplicita, necessaria alla libreria --- */
+#mappa {
+    height: 70vh;
+    min-height: 400px;
+}
+
+/* Segnaposto della mappa (usato da L.divIcon in static/js/mappa.js):
+   pin blu predefinito di Leaflet con il contatore dei libri agganciato
+   in alto a destra, come un badge di notifica. */
+.segnaposto {
+    position: relative;
+    width: 25px;   /* dimensioni del pin predefinito di Leaflet */
+    height: 41px;
+}
+
+/* L'ombra del pin (stessa origine del pin, si estende verso destra) */
+.segnaposto-ombra {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Numerino con il totale dei libri della citta', agganciato al pin */
+.segnaposto-conteggio {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background-color: var(--brand-color);
+    color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
 /* --- Galleria: immagini con altezza uniforme ed effetto al passaggio del mouse --- */
 .gallery-img {
     width: 100%;

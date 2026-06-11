@@ -15,6 +15,8 @@
     <!-- Foglio di stile personalizzato dell'applicazione -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
+    {# Risorse aggiuntive per la singola pagina (es. CSS di Leaflet) #}
+    {% block testa %}{% endblock %}
 </head>
 <body>
     <!-- Barra di navigazione -->
@@ -32,6 +34,9 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('ricerca.cerca') }}">Cerca libri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mappa.mappa') }}">Mappa</a>
                     </li>
                     {% if session.utente_id %}
                     <li class="nav-item">
@@ -89,5 +94,7 @@
 
     <!-- Bundle JavaScript di Bootstrap (componenti interattivi) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {# Script aggiuntivi per la singola pagina (es. inizializzazione mappa) #}
+    {% block script %}{% endblock %}
 </body>
 </html>
