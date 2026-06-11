@@ -13,3 +13,8 @@ PyMySQL
 # Grafici generati lato server come da dispensa "Rappresentazione grafica
 # dei dati" (Programmazione 2).
 matplotlib
+
+# --- T8: Sicurezza (HTTPS/TLS) ---
+# Usata da genera_certificato.py per creare il certificato autofirmato
+# (chiave RSA + firma SHA-256, algoritmi trattati in Cybersecurity).
+cryptography

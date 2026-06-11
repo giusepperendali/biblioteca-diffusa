@@ -3,6 +3,8 @@
 #   - models/       -> Model       (gestione e persistenza dei dati, MySQL)
 #   - controllers/  -> Controller  (logica applicativa e instradamento richieste, Blueprint)
 #   - views/        -> View        (template HTML renderizzati con Jinja2 + Bootstrap)
+import os
+
 from flask import Flask, session
 
 from controllers.main import main_bp
@@ -63,6 +65,19 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    # Avvio del server di sviluppo. In produzione si userebbe un WSGI server
-    # con HTTPS/TLS (vedi Task sicurezza).
-    app.run(debug=True)
+    # --- Sicurezza del canale: HTTPS/TLS (Task T8, dispense Cybersecurity) ---
+    # Se il certificato locale esiste (creato con genera_certificato.py),
+    # il server parte in HTTPS: tutto il traffico, credenziali comprese,
+    # viaggia cifrato con TLS. In produzione si userebbe un WSGI server
+    # dietro un certificato emesso da una Certification Authority.
+    from genera_certificato import PERCORSO_CERTIFICATO, PERCORSO_CHIAVE
+
+    if os.path.exists(PERCORSO_CERTIFICATO) and os.path.exists(PERCORSO_CHIAVE):
+        # Con HTTPS attivo il cookie di sessione viaggia solo su canale cifrato
+        app.config["SESSION_COOKIE_SECURE"] = True
+        app.run(debug=True,
+                ssl_context=(PERCORSO_CERTIFICATO, PERCORSO_CHIAVE))
+    else:
+        # Certificati assenti: avvio in HTTP semplice (solo sviluppo).
+        # Per attivare HTTPS: python genera_certificato.py
+        app.run(debug=True)

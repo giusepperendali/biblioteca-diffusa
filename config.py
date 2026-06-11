@@ -25,3 +25,11 @@ class Config:
     ESTENSIONI_COPERTINA = {"png", "jpg", "jpeg", "gif", "webp"}
     # Flask rifiuta automaticamente le richieste piu' grandi di MAX_CONTENT_LENGTH.
     MAX_CONTENT_LENGTH = 4 * 1024 * 1024  # 4 MB
+
+    # --- Sicurezza del cookie di sessione (Task T8) ---
+    # Il cookie firmato di Flask contiene l'identita' dell'utente: queste
+    # impostazioni ne limitano l'esposizione.
+    SESSION_COOKIE_HTTPONLY = True   # non leggibile da JavaScript (mitiga XSS)
+    SESSION_COOKIE_SAMESITE = "Lax"  # non inviato da siti terzi (mitiga CSRF)
+    # SESSION_COOKIE_SECURE (solo su HTTPS) viene attivato in app.py quando
+    # il server parte con il certificato TLS.

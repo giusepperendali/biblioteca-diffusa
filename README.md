@@ -111,6 +111,22 @@ python app.py
 
 L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 
+## Sicurezza: HTTPS/TLS
+
+Per avviare il server su canale cifrato si genera prima il certificato TLS
+autofirmato (chiave RSA 2048 + firma SHA-256):
+
+```powershell
+python genera_certificato.py   # crea certificati/certificato.pem e chiave.pem
+python app.py                  # ora il server parte in HTTPS
+```
+
+L'applicazione risponde su **https://127.0.0.1:5000/** e il cookie di sessione
+viene marcato `Secure` (oltre a `HttpOnly` e `SameSite=Lax`, sempre attivi).
+Essendo il certificato autofirmato, il browser mostra un avviso da accettare:
+in produzione si userebbe un certificato emesso da una Certification
+Authority. Le password degli utenti sono memorizzate come hash SHA-256.
+
 ## Stato di avanzamento
 
 - [x] **T0** — Setup ambiente e struttura MVC
@@ -121,6 +137,6 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 - [x] **T5** — Mappa (Leaflet, marcatori raggruppati per posizione)
 - [x] **T6** — Dettaglio libro e richiesta di prestito (simulata, con ciclo di stati)
 - [x] **T7** — Dashboard statistiche (grafici matplotlib lato server, riservata all'admin)
-- [ ] **T8** — Sicurezza (HTTPS/TLS)
+- [x] **T8** — Sicurezza (HTTPS/TLS con certificato autofirmato, cookie di sessione protetti)
 - [ ] **T9** — Documento Pegaso
 - [ ] **T10** — Finalizzazione
