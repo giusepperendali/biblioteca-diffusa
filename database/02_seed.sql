@@ -22,6 +22,11 @@ INSERT INTO utenti (nome, cognome, email, password_hash, citta, lat, lon) VALUES
 ('Elena',   'Conti',    'elena.conti@example.com',     'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Firenze', 43.769600, 11.255800),
 ('Davide',  'Greco',    'davide.greco@example.com',    'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'Bologna', 44.494900, 11.342600);
 
+-- Utente AMMINISTRATORE (ruolo 'admin'): accede alla dashboard statistiche.
+-- Inserito dopo gli utenti 1..6 per non alterare gli id referenziati dai libri.
+INSERT INTO utenti (nome, cognome, email, password_hash, ruolo) VALUES
+('Amministratore', 'Sistema', 'admin@example.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'admin');
+
 -- ---------------------------------------------------------------------------
 -- LIBRI (id 1..14) — geolocalizzati nei pressi della citta' del proprietario
 -- ---------------------------------------------------------------------------

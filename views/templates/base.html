@@ -38,6 +38,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('mappa.mappa') }}">Mappa</a>
                     </li>
+                    {# Dashboard statistiche: voce visibile solo all'admin #}
+                    {% if session.utente_ruolo == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('statistiche.dashboard') }}">Statistiche</a>
+                    </li>
+                    {% endif %}
                     {% if session.utente_id %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('libri.lista') }}">I miei libri</a>

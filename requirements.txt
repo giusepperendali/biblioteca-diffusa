@@ -8,3 +8,8 @@ Flask
 # Driver MySQL per Python come da dispensa "Configurazione e uso di un database
 # MySQL con Python" (Programmazione 2), che utilizza il modulo pymysql.
 PyMySQL
+
+# --- T7: Dashboard statistiche ---
+# Grafici generati lato server come da dispensa "Rappresentazione grafica
+# dei dati" (Programmazione 2).
+matplotlib

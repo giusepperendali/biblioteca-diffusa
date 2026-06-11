@@ -1,0 +1,84 @@
+{# statistiche.html — Dashboard con i numeri della rete e i grafici generati
+   lato server da matplotlib (ogni <img> punta a una rotta che produce il PNG). #}
+{% extends "base.html" %}
+
+{% block titolo %}Statistiche &middot; Biblioteca Diffusa{% endblock %}
+
+{% block contenuto %}
+<h1 class="h3 mb-1">Statistiche della rete</h1>
+<p class="text-muted mb-4">
+    Dashboard amministrativa: una fotografia della comunità in dati aggregati.
+</p>
+
+<!-- Numeri principali -->
+<div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+    <div class="col">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold">{{ totali.utenti }}</div>
+                <div class="text-muted">👥 Lettori iscritti</div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold">{{ totali.libri }}</div>
+                <div class="text-muted">📚 Libri condivisi</div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold">{{ totali.prestiti }}</div>
+                <div class="text-muted">🤝 Richieste di prestito</div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold">{{ totali.citta }}</div>
+                <div class="text-muted">📍 Città coperte</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grafici (PNG generati dal server con matplotlib) -->
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center">
+                <img src="{{ url_for('statistiche.grafico', nome='libri-citta') }}"
+                     class="img-fluid" alt="Grafico a barre: libri per città">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center">
+                <img src="{{ url_for('statistiche.grafico', nome='disponibilita') }}"
+                     class="img-fluid" alt="Grafico a torta: disponibilità dei libri">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center">
+                <img src="{{ url_for('statistiche.grafico', nome='piu-richiesti') }}"
+                     class="img-fluid" alt="Grafico a barre: libri più richiesti">
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-body text-center">
+                <img src="{{ url_for('statistiche.grafico', nome='prestiti-stato') }}"
+                     class="img-fluid" alt="Grafico a torta: prestiti per stato">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

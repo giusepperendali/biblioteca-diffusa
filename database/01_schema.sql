@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS utenti (
     lon                 DECIMAL(9, 6),
     -- Nome file della foto del profilo (in static/uploads), facoltativa.
     foto                VARCHAR(255),
+    -- Ruolo dell'utente: 'admin' accede alla dashboard statistiche.
+    ruolo               ENUM('utente', 'admin') NOT NULL DEFAULT 'utente',
     data_registrazione  TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

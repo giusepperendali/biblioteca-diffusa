@@ -11,6 +11,7 @@ from controllers.libri import libri_bp
 from controllers.ricerca import ricerca_bp
 from controllers.mappa import mappa_bp
 from controllers.prestiti import prestiti_bp
+from controllers.statistiche import statistiche_bp
 from models.prestito import Prestito
 
 
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(ricerca_bp)
     app.register_blueprint(mappa_bp)
     app.register_blueprint(prestiti_bp)
+    app.register_blueprint(statistiche_bp)
 
     # Filtro Jinja per mostrare le date nel formato italiano gg/mm/aaaa.
     @app.template_filter("data_it")

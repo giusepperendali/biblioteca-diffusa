@@ -86,6 +86,8 @@ SOURCE database/02_seed.sql;
 In entrambi i casi i parametri di connessione (in `config.py`) sono: database
 `biblioteca_diffusa`, utente `biblioteca` / `bibliopw` su `localhost:3306`.
 Password di test degli utenti del seed: `password123`.
+La **dashboard statistiche** è riservata all'amministratore:
+account di test `admin@example.com` / `password123`.
 
 Verifica rapida del database:
 
@@ -118,7 +120,7 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 - [x] **T4** — Ricerca testuale e geospaziale (LIKE su titolo/autore, Haversine inline in SQL)
 - [x] **T5** — Mappa (Leaflet, marcatori raggruppati per posizione)
 - [x] **T6** — Dettaglio libro e richiesta di prestito (simulata, con ciclo di stati)
-- [ ] **T7** — Dashboard statistiche
+- [x] **T7** — Dashboard statistiche (grafici matplotlib lato server, riservata all'admin)
 - [ ] **T8** — Sicurezza (HTTPS/TLS)
 - [ ] **T9** — Documento Pegaso
 - [ ] **T10** — Finalizzazione

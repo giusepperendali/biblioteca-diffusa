@@ -4,7 +4,7 @@
 from functools import wraps
 
 from flask import (
-    Blueprint, render_template, request, redirect, url_for, session, flash
+    Blueprint, render_template, request, redirect, url_for, session, flash, abort
 )
 
 from models.utente import Utente
@@ -20,6 +20,24 @@ def login_richiesto(view):
         if "utente_id" not in session:
             flash("Devi accedere per visualizzare questa pagina.", "warning")
             return redirect(url_for("auth.login"))
+        return view(*args, **kwargs)
+    return wrapper
+
+
+def admin_richiesto(view):
+    """Decoratore: rotta riservata all'amministratore (dashboard statistiche).
+
+    Il ruolo viene verificato sul database (non solo in sessione), cosi' un
+    eventuale cambio di ruolo ha effetto immediato.
+    """
+    @wraps(view)
+    def wrapper(*args, **kwargs):
+        if "utente_id" not in session:
+            flash("Devi accedere per visualizzare questa pagina.", "warning")
+            return redirect(url_for("auth.login"))
+        utente = Utente.trova_per_id(session["utente_id"])
+        if utente is None or utente["ruolo"] != "admin":
+            abort(403)
         return view(*args, **kwargs)
     return wrapper
 
@@ -61,6 +79,8 @@ def login():
             # Si memorizzano in sessione solo i dati essenziali
             session["utente_id"] = utente["id"]
             session["utente_nome"] = utente["nome"]
+            # Il ruolo serve alla navbar per mostrare le voci da admin
+            session["utente_ruolo"] = utente["ruolo"]
             flash("Bentornato, %s!" % utente["nome"], "success")
             return redirect(url_for("auth.profilo"))
 
