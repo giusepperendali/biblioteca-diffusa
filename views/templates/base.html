@@ -30,6 +30,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navContenuto">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ricerca.cerca') }}">Cerca libri</a>
+                    </li>
                     {% if session.utente_id %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('libri.lista') }}">I miei libri</a>

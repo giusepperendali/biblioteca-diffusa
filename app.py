@@ -8,6 +8,7 @@ from flask import Flask
 from controllers.main import main_bp
 from controllers.auth import auth_bp
 from controllers.libri import libri_bp
+from controllers.ricerca import ricerca_bp
 
 
 def create_app():
@@ -28,6 +29,7 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(libri_bp)
+    app.register_blueprint(ricerca_bp)
 
     # Filtro Jinja per mostrare le date nel formato italiano gg/mm/aaaa.
     @app.template_filter("data_it")

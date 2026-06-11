@@ -1,0 +1,92 @@
+{# ricerca.html — Ricerca dei libri condivisi: testuale (titolo/autore) e
+   geospaziale (entro N km da una citta'). Il form usa il metodo GET, cosi' i
+   criteri restano nell'URL e la ricerca e' ripetibile/condivisibile. #}
+{% extends "base.html" %}
+
+{% block titolo %}Cerca libri &middot; Biblioteca Diffusa{% endblock %}
+
+{% block contenuto %}
+<h1 class="h3 mb-4">Cerca libri</h1>
+
+<!-- Form dei criteri di ricerca -->
+<form method="get" action="{{ url_for('ricerca.cerca') }}" class="card shadow-sm mb-4">
+    <div class="card-body row g-3 align-items-end">
+        <div class="col-md-5">
+            <label for="q" class="form-label">Titolo o autore</label>
+            <input type="text" class="form-control" id="q" name="q"
+                   value="{{ testo }}" placeholder="Es. Calvino, Promessi sposi…">
+        </div>
+        <div class="col-md-3">
+            <label for="citta" class="form-label">Vicino a</label>
+            <select class="form-select" id="citta" name="citta">
+                <option value="">— Ovunque —</option>
+                {% for nome in citta_disponibili %}
+                <option value="{{ nome }}" {% if nome == citta %}selected{% endif %}>{{ nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="raggio" class="form-label">Entro (km)</label>
+            <select class="form-select" id="raggio" name="raggio">
+                {% for km in raggi %}
+                <option value="{{ km }}" {% if km == raggio %}selected{% endif %}>{{ km }} km</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">🔍 Cerca</button>
+        </div>
+    </div>
+</form>
+
+{# 'risultati' e' None alla prima apertura (nessuna ricerca eseguita) #}
+{% if risultati is not none %}
+
+<p class="text-muted">
+    {{ risultati | length }} libr{{ 'o' if risultati | length == 1 else 'i' }}
+    trovat{{ 'o' if risultati | length == 1 else 'i' }}
+    {%- if testo %} per «{{ testo }}»{% endif %}
+    {%- if citta %} entro {{ raggio }} km da {{ citta }}{% endif %}.
+</p>
+
+{% if risultati %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+    {% for libro in risultati %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if libro.copertina %}
+            <img src="{{ url_for('static', filename='uploads/' ~ libro.copertina) }}"
+                 class="card-img-top cover-thumb" alt="Copertina di {{ libro.titolo }}">
+            {% else %}
+            <div class="cover-thumb cover-placeholder">📕</div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title mb-1">{{ libro.titolo }}</h5>
+                <p class="text-muted mb-2">{{ libro.autore }}{% if libro.anno %} &middot; {{ libro.anno }}{% endif %}</p>
+                {% if libro.disponibile %}
+                <span class="badge bg-success">Disponibile</span>
+                {% else %}
+                <span class="badge bg-secondary">Non disponibile</span>
+                {% endif %}
+                <div class="small text-muted mt-2">
+                    📍 {{ libro.citta }}
+                    {%- if libro.distanza_km is defined %} &middot; a {{ libro.distanza_km | round(1) }} km{% endif %}
+                </div>
+                <div class="small text-muted">
+                    👤 {{ libro.proprietario_nome }} {{ libro.proprietario_cognome }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted py-5">
+    <div class="display-1">🔍</div>
+    <p class="mt-3">Nessun libro corrisponde ai criteri di ricerca.<br>
+        Prova ad ampliare il raggio o a modificare il testo.</p>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

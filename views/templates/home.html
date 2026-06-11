@@ -17,8 +17,8 @@
             <a href="#come-funziona" class="btn btn-light btn-lg px-4">
                 🧭 Scopri come funziona
             </a>
-            <a href="#galleria" class="btn btn-outline-light btn-lg px-4">
-                🔍 Sfoglia
+            <a href="{{ url_for('ricerca.cerca') }}" class="btn btn-outline-light btn-lg px-4">
+                🔍 Cerca un libro
             </a>
         </div>
     </div>
@@ -95,8 +95,8 @@
 
 <!-- Nota di stato del prototipo -->
 <p class="text-center text-muted small mt-3">
-    Setup iniziale completato (Task&nbsp;T0). Le funzionalità — profilo, gestione
-    libri, ricerca, mappa, prestiti e statistiche — verranno aggiunte nei task successivi.
+    Prototipo in sviluppo: profilo, gestione libri e ricerca sono già disponibili;
+    mappa, prestiti e statistiche verranno aggiunti nei task successivi.
 </p>
 
 {% endblock %}
