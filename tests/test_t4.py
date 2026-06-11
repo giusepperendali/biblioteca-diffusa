@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app import app
 from models.libro import Libro
+from models.utente import Utente
 from models.citta import coordinate_di
 from models.geo import distanza_km
 
@@ -81,8 +82,32 @@ def main():
 
     # 10) Pagina /ricerca: la ricerca testuale mostra il libro trovato
     r = client.get("/ricerca?q=rosa")
+    corpo = r.get_data(as_text=True)
     esiti.append(("/ricerca?q=rosa mostra il risultato",
-                  r.status_code == 200 and "Il nome della rosa" in r.get_data(as_text=True)))
+                  r.status_code == 200 and "Il nome della rosa" in corpo))
+
+    # 10b) Privacy: da anonimi il nome del proprietario NON e' visibile
+    #      (al suo posto l'invito ad accedere); da autenticati si'
+    anonimo_nascosto = "Rossi" not in corpo and "per vedere chi lo condivide" in corpo
+    cl_aut = app.test_client()
+    cl_aut.post("/login", data={"email": "marco.bianchi@example.com",
+                                "password": "password123"})
+    corpo_aut = cl_aut.get("/ricerca?q=rosa").get_data(as_text=True)
+    esiti.append(("privacy: proprietario solo per utenti autenticati",
+                  anonimo_nascosto and "Rossi" in corpo_aut))
+
+    # 10c) Chi e' autenticato non vede i PROPRI libri tra i risultati
+    #      ("Il nome della rosa" e' di Giulia: lei non lo trova, Marco si')
+    giulia = Utente.trova_per_email("giulia.rossi@example.com")
+    senza_propri = Libro.cerca(testo="rosa", escludi_utente_id=giulia["id"])
+    cl_giulia = app.test_client()
+    cl_giulia.post("/login", data={"email": "giulia.rossi@example.com",
+                                   "password": "password123"})
+    corpo_giulia = cl_giulia.get("/ricerca?q=rosa").get_data(as_text=True)
+    esiti.append(("i propri libri sono esclusi dai risultati",
+                  all(l["utente_id"] != giulia["id"] for l in senza_propri)
+                  and "Il nome della rosa" not in corpo_giulia
+                  and "Il nome della rosa" in corpo_aut))
 
     # 11) Pagina /ricerca: ricerca geospaziale con distanza indicata
     r = client.get("/ricerca?q=&citta=Roma&raggio=50")

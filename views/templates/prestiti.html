@@ -1,0 +1,179 @@
+{# prestiti.html — Gestione dei prestiti dell'utente: richieste ricevute sui
+   propri libri (con le azioni del proprietario) e richieste inviate. #}
+{% extends "base.html" %}
+
+{% block titolo %}Prestiti &middot; Biblioteca Diffusa{% endblock %}
+
+{# Colore del badge per ciascuno stato del prestito #}
+{% set colori_stato = {'richiesto': 'warning text-dark', 'accettato': 'success',
+                       'in_restituzione': 'info text-dark',
+                       'rifiutato': 'danger', 'restituito': 'secondary'} %}
+{# Etichetta leggibile per gli stati composti #}
+{% set nomi_stato = {'richiesto': 'richiesto', 'accettato': 'accettato',
+                     'in_restituzione': 'in restituzione',
+                     'rifiutato': 'rifiutato', 'restituito': 'restituito'} %}
+
+{% block contenuto %}
+<h1 class="h3 mb-4">Prestiti</h1>
+
+<!-- Richieste ricevute (l'utente e' il proprietario del libro) -->
+<h2 class="h5 mb-3">📥 Richieste ricevute</h2>
+{% if ricevuti %}
+<div class="table-responsive mb-5">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Richiedente</th>
+                <th>Data</th>
+                <th>Stato</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in ricevuti %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('prestiti.scheda', libro_id=p.libro_id) }}">
+                        {{ p.titolo }}</a>
+                    <div class="small text-muted">{{ p.autore }}</div>
+                </td>
+                <td>{{ p.richiedente_nome }} {{ p.richiedente_cognome }}</td>
+                <td>{{ p.data_richiesta | data_it }}</td>
+                <td><span class="badge bg-{{ colori_stato[p.stato] }}">{{ nomi_stato[p.stato] }}</span></td>
+                <td>
+                    {% if p.stato == 'richiesto' %}
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{{ url_for('prestiti.accetta', prestito_id=p.id) }}">
+                            <button type="submit" class="btn btn-sm btn-success">✔️ Accetta</button>
+                        </form>
+                        <form method="post" action="{{ url_for('prestiti.rifiuta', prestito_id=p.id) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">✖️ Rifiuta</button>
+                        </form>
+                    </div>
+                    {% elif p.stato == 'accettato' %}
+                    <span class="text-muted small">In prestito: in attesa che il
+                        richiedente dichiari la riconsegna</span>
+                    {% elif p.stato == 'in_restituzione' %}
+                    <form method="post" action="{{ url_for('prestiti.restituito', prestito_id=p.id) }}">
+                        <button type="submit" class="btn btn-sm btn-success">✔️ Conferma restituzione</button>
+                    </form>
+                    {% else %}
+                    <span class="text-muted small">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted mb-5">Nessuna richiesta ricevuta sui tuoi libri.</p>
+{% endif %}
+
+<!-- Richieste inviate (l'utente e' il richiedente) -->
+<h2 class="h5 mb-3">📤 Richieste inviate</h2>
+
+{# Spiegazione dell'esito mostrata nel dettaglio espanso #}
+{% set spiegazioni_stato = {
+    'richiesto':  "In attesa di risposta dal proprietario.",
+    'accettato':  "Il proprietario ha accettato la tua richiesta: accordatevi
+                   per la consegna (prestito simulato). Quando riconsegni il
+                   libro, dichiaralo con il pulsante apposito.",
+    'in_restituzione': "Hai dichiarato la riconsegna: in attesa della conferma
+                   del proprietario.",
+    'rifiutato':  "Il proprietario ha rifiutato la richiesta: il libro non
+                   verra' prestato.",
+    'restituito': "La restituzione e' stata confermata: il prestito si e'
+                   concluso."
+} %}
+
+{% if inviati %}
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Proprietario</th>
+                <th>Data</th>
+                <th>Stato</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in inviati %}
+            <tr id="prestito-{{ p.id }}">
+                <td>
+                    <a href="{{ url_for('prestiti.scheda', libro_id=p.libro_id) }}">
+                        {{ p.titolo }}</a>
+                    <div class="small text-muted">{{ p.autore }}</div>
+                </td>
+                <td>{{ p.proprietario_nome }} {{ p.proprietario_cognome }}</td>
+                <td>{{ p.data_richiesta | data_it }}</td>
+                <td>
+                    <span class="badge bg-{{ colori_stato[p.stato] }}">{{ nomi_stato[p.stato] }}</span>
+                </td>
+                <td class="text-end">
+                    <div class="d-flex gap-2 justify-content-end">
+                        {% if p.stato == 'accettato' %}
+                        {# Il richiedente dichiara la riconsegna; chiude il
+                           prestito solo la conferma del proprietario #}
+                        <form method="post"
+                              action="{{ url_for('prestiti.dichiara_restituzione', prestito_id=p.id) }}">
+                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                📦 Ho riconsegnato il libro</button>
+                        </form>
+                        {% endif %}
+                        {% if apri == p.id %}
+                        <a href="{{ url_for('prestiti.elenco') }}"
+                           class="btn btn-sm btn-outline-secondary">Chiudi</a>
+                        {% else %}
+                        <a href="{{ url_for('prestiti.elenco', apri=p.id) }}#prestito-{{ p.id }}"
+                           class="btn btn-sm btn-outline-primary position-relative">
+                            Dettagli
+                            {# Pallino rosso: esito non ancora letto; sparisce
+                               aprendo il dettaglio #}
+                            {% if p.notifica_richiedente %}
+                            <span class="position-absolute top-0 start-100 translate-middle
+                                         badge rounded-pill bg-danger notifica-dettagli">1</span>
+                            {% endif %}
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {# Dettaglio espanso: aprirlo segna l'esito come letto #}
+            {% if apri == p.id %}
+            <tr class="table-light">
+                <td colspan="5">
+                    <div class="d-flex gap-3 align-items-center py-2">
+                        {% if p.copertina %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ p.copertina) }}"
+                             class="cover-thumb-small" alt="Copertina di {{ p.titolo }}">
+                        {% endif %}
+                        <div>
+                            <div><strong>{{ p.titolo }}</strong> &middot; {{ p.autore }}</div>
+                            <div class="text-muted">{{ spiegazioni_stato[p.stato] }}</div>
+                            <div class="small text-muted">
+                                Richiesta inviata il {{ p.data_richiesta | data_it }}
+                                a {{ p.proprietario_nome }} {{ p.proprietario_cognome }} &middot;
+                                <a href="{{ url_for('prestiti.scheda', libro_id=p.libro_id) }}">
+                                    vai alla scheda del libro</a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">
+    Non hai ancora chiesto libri in prestito:
+    <a href="{{ url_for('ricerca.cerca') }}">cerca un libro</a> oppure
+    <a href="{{ url_for('mappa.mappa') }}">guarda la mappa</a>.
+</p>
+{% endif %}
+{% endblock %}

@@ -22,6 +22,34 @@
 </p>
 
 <div id="mappa" class="rounded shadow-sm"></div>
+
+{# Finestra modale (Bootstrap) mostrata agli utenti non autenticati quando
+   selezionano un libro dalla mappa: invito ad accedere o registrarsi. #}
+<div class="modal fade" id="modalAccesso" tabindex="-1"
+     aria-labelledby="modalAccessoTitolo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body pt-0 pb-4 px-4">
+                <div class="display-4 mb-2">📚</div>
+                <h5 class="modal-title mb-2" id="modalAccessoTitolo">
+                    Vivi l'esperienza della <span class="brand">Biblioteca Diffusa</span>
+                </h5>
+                <p class="text-muted">
+                    Accedi o registrati per consultare la scheda dei libri
+                    e chiederli in prestito ai lettori della tua zona.
+                </p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary px-4">Accedi</a>
+                    <a href="{{ url_for('auth.registrazione') }}" class="btn btn-outline-primary px-4">Registrati</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {# Libreria Leaflet + dati dei marcatori + script della mappa #}
@@ -30,6 +58,9 @@
 <script>
     // Marcatori generati lato server (Controller) e letti da mappa.js
     const MARCATORI = {{ marcatori | tojson }};
+    // Se l'utente non e' autenticato, il click su un libro apre l'invito
+    // ad accedere/registrarsi anziche' la scheda (vedi mappa.js)
+    const UTENTE_AUTENTICATO = {{ 'true' if session.utente_id else 'false' }};
 </script>
 <script src="{{ url_for('static', filename='js/mappa.js') }}"></script>
 {% endblock %}

@@ -90,10 +90,13 @@ def modifica(libro_id):
         if nuova_copertina:
             rimuovi_immagine(libro["copertina"])
 
+        # Casella "Disponibile al prestito": se non spuntata non arriva nel form
+        disponibile = request.form.get("disponibile") is not None
+
         Libro.aggiorna(
             libro_id, dati["titolo"], dati["autore"], dati["anno"],
             dati["descrizione"], dati["citta"], dati["lat"], dati["lon"],
-            copertina=nuova_copertina,
+            disponibile=disponibile, copertina=nuova_copertina,
         )
         flash("Libro aggiornato.", "success")
         return redirect(url_for("libri.lista"))

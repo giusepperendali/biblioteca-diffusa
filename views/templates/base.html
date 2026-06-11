@@ -43,6 +43,16 @@
                         <a class="nav-link" href="{{ url_for('libri.lista') }}">I miei libri</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('prestiti.elenco') }}">
+                            Prestiti
+                            {# Badge: richieste da decidere + esiti non ancora visti #}
+                            {% if notifiche_prestiti > 0 %}
+                            <span class="badge rounded-pill bg-danger notifiche-prestiti">
+                                {{ notifiche_prestiti }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.profilo') }}">
                             👤 {{ session.utente_nome }}
                         </a>

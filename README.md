@@ -117,7 +117,7 @@ L'applicazione sarà raggiungibile su http://127.0.0.1:5000/
 - [x] **T3** — Gestione libri e miniature (CRUD, upload copertina, miniatura via CSS)
 - [x] **T4** — Ricerca testuale e geospaziale (LIKE su titolo/autore, Haversine inline in SQL)
 - [x] **T5** — Mappa (Leaflet, marcatori raggruppati per posizione)
-- [ ] **T6** — Dettaglio libro e richiesta di prestito
+- [x] **T6** — Dettaglio libro e richiesta di prestito (simulata, con ciclo di stati)
 - [ ] **T7** — Dashboard statistiche
 - [ ] **T8** — Sicurezza (HTTPS/TLS)
 - [ ] **T9** — Documento Pegaso

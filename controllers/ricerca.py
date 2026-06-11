@@ -4,7 +4,7 @@
 # citta' di riferimento e un raggio in km. Le coordinate della citta' vengono
 # ricavate dal menu a tendina (models/citta.py) e la distanza e' calcolata
 # nella query SQL con la formula di Haversine.
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, session
 
 from models.libro import Libro
 from models.citta import elenco_citta, coordinate_di
@@ -51,6 +51,8 @@ def cerca():
                 testo=testo or None,
                 lat=lat, lon=lon,
                 raggio_km=raggio if citta else None,
+                # Chi e' autenticato non vede i propri libri tra i risultati
+                escludi_utente_id=session.get("utente_id"),
             )
 
     return render_template(

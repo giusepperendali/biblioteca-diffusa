@@ -71,6 +71,19 @@
                 <div class="form-text">Formati: PNG, JPG, GIF, WEBP. Max 4 MB.</div>
             </div>
 
+            {% if azione == 'modifica' %}
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="disponibile"
+                       name="disponibile" {{ 'checked' if libro.disponibile else '' }}>
+                <label class="form-check-label" for="disponibile">Disponibile al prestito</label>
+                <div class="form-text">
+                    Togli la spunta se il libro non &egrave; al momento prestabile
+                    (la disponibilit&agrave; cambia anche da sola quando accetti un
+                    prestito o registri una restituzione).
+                </div>
+            </div>
+            {% endif %}
+
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">
                     {{ 'Salva modifiche' if azione == 'modifica' else 'Aggiungi libro' }}

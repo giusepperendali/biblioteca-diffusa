@@ -3,13 +3,15 @@
 #   - models/       -> Model       (gestione e persistenza dei dati, MySQL)
 #   - controllers/  -> Controller  (logica applicativa e instradamento richieste, Blueprint)
 #   - views/        -> View        (template HTML renderizzati con Jinja2 + Bootstrap)
-from flask import Flask
+from flask import Flask, session
 
 from controllers.main import main_bp
 from controllers.auth import auth_bp
 from controllers.libri import libri_bp
 from controllers.ricerca import ricerca_bp
 from controllers.mappa import mappa_bp
+from controllers.prestiti import prestiti_bp
+from models.prestito import Prestito
 
 
 def create_app():
@@ -32,6 +34,7 @@ def create_app():
     app.register_blueprint(libri_bp)
     app.register_blueprint(ricerca_bp)
     app.register_blueprint(mappa_bp)
+    app.register_blueprint(prestiti_bp)
 
     # Filtro Jinja per mostrare le date nel formato italiano gg/mm/aaaa.
     @app.template_filter("data_it")
@@ -39,6 +42,17 @@ def create_app():
         if valore is None:
             return ""
         return valore.strftime("%d/%m/%Y")
+
+    # Variabile disponibile in TUTTI i template: notifiche per il badge
+    # "Prestiti" in navbar = richieste da decidere sui propri libri (lato
+    # proprietario) + esiti non ancora visti (lato richiedente).
+    @app.context_processor
+    def notifiche_prestiti():
+        if "utente_id" in session:
+            totale = (Prestito.conta_in_attesa(session["utente_id"])
+                      + Prestito.conta_novita(session["utente_id"]))
+            return {"notifiche_prestiti": totale}
+        return {"notifiche_prestiti": 0}
 
     return app
 

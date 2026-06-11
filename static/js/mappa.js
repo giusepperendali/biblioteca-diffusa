@@ -33,9 +33,20 @@ MARCATORI.forEach(function (punto) {
         var stato = libro.disponibile
             ? '<span class="badge bg-success">Disponibile</span>'
             : '<span class="badge bg-secondary">Non disponibile</span>';
-        return "<li class='mb-2'><strong>" + testoSicuro(libro.titolo) + "</strong><br>" +
-               testoSicuro(libro.autore) + " &middot; di " +
-               testoSicuro(libro.proprietario) + "<br>" + stato + "</li>";
+        // Utente autenticato: il titolo porta alla scheda del libro.
+        // Utente anonimo: il titolo apre la finestra "Accedi o registrati"
+        // (modal Bootstrap definita in mappa.html).
+        var titolo = UTENTE_AUTENTICATO
+            ? "<a href='/libri/" + libro.id + "'>" + testoSicuro(libro.titolo) + "</a>"
+            : "<a href='#' data-bs-toggle='modal' data-bs-target='#modalAccesso'>" +
+              testoSicuro(libro.titolo) + "</a>";
+        // Privacy: per gli utenti non autenticati il server non invia il
+        // nome del proprietario (libro.proprietario assente)
+        var proprietario = libro.proprietario
+            ? " &middot; di " + testoSicuro(libro.proprietario)
+            : "";
+        return "<li class='mb-2'><strong>" + titolo + "</strong><br>" +
+               testoSicuro(libro.autore) + proprietario + "<br>" + stato + "</li>";
     });
 
     var fumetto = "<div><strong>📍 " + testoSicuro(punto.citta) + " (" +

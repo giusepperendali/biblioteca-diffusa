@@ -62,14 +62,23 @@ CREATE TABLE IF NOT EXISTS libri (
 -- ---------------------------------------------------------------------------
 -- Tabella PRESTITI
 -- Richiesta di prestito (simulata) di un libro da parte di un utente diverso
--- dal proprietario. Lo stato segue un piccolo ciclo di vita.
+-- dal proprietario. Ciclo di vita degli stati:
+--   richiesto -> accettato | rifiutato     (decisione del proprietario)
+--   accettato -> in_restituzione           (il richiedente dichiara la riconsegna)
+--   in_restituzione -> restituito          (CONFERMA del proprietario: solo qui
+--                                           il libro torna disponibile)
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS prestiti (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     libro_id        INT         NOT NULL,
     richiedente_id  INT         NOT NULL,
-    stato           ENUM('richiesto', 'accettato', 'rifiutato', 'restituito')
+    stato           ENUM('richiesto', 'accettato', 'in_restituzione',
+                         'rifiutato', 'restituito')
                     NOT NULL DEFAULT 'richiesto',
+    -- TRUE quando il proprietario ha deciso (accettato/rifiutato) e il
+    -- richiedente non ha ancora aperto il dettaglio dell'esito: alimenta il
+    -- badge di notifica in navbar.
+    notifica_richiedente BOOLEAN NOT NULL DEFAULT FALSE,
     data_richiesta  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_prestiti_libro
         FOREIGN KEY (libro_id) REFERENCES libri(id)

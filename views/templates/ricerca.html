@@ -61,7 +61,10 @@
             <div class="cover-thumb cover-placeholder">📕</div>
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title mb-1">{{ libro.titolo }}</h5>
+                <h5 class="card-title mb-1">
+                    <a href="{{ url_for('prestiti.scheda', libro_id=libro.id) }}"
+                       class="text-decoration-none text-reset">{{ libro.titolo }}</a>
+                </h5>
                 <p class="text-muted mb-2">{{ libro.autore }}{% if libro.anno %} &middot; {{ libro.anno }}{% endif %}</p>
                 {% if libro.disponibile %}
                 <span class="badge bg-success">Disponibile</span>
@@ -73,8 +76,18 @@
                     {%- if libro.distanza_km is defined %} &middot; a {{ libro.distanza_km | round(1) }} km{% endif %}
                 </div>
                 <div class="small text-muted">
+                    {# Privacy: il nome di chi condivide e' visibile solo agli
+                       utenti autenticati #}
+                    {% if session.utente_id %}
                     👤 {{ libro.proprietario_nome }} {{ libro.proprietario_cognome }}
+                    {% else %}
+                    🔒 <a href="{{ url_for('auth.login') }}">Accedi</a> per vedere chi lo condivide
+                    {% endif %}
                 </div>
+            </div>
+            <div class="card-footer bg-white border-0">
+                <a href="{{ url_for('prestiti.scheda', libro_id=libro.id) }}"
+                   class="btn btn-sm btn-outline-primary">📖 Vedi scheda</a>
             </div>
         </div>
     </div>

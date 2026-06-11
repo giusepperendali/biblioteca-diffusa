@@ -35,6 +35,23 @@ def main():
     esiti.append(("dati marcatori nella pagina",
                   "Il nome della rosa" in corpo and "MARCATORI" in corpo))
 
+    # 3b) Utente anonimo: la pagina contiene l'invito ad accedere/registrarsi
+    #     (modal) e segnala il mancato login al JavaScript della mappa
+    esiti.append(("anonimo: modal Accedi/Registrati presente",
+                  "modalAccesso" in corpo and "UTENTE_AUTENTICATO = false" in corpo))
+
+    # 3c) Privacy: da anonimi i dati dei marcatori NON contengono il nome del
+    #     proprietario; da autenticati si' (e il JS riceve lo stato di login)
+    esiti.append(("anonimo: nessun proprietario nei dati della mappa",
+                  '"proprietario"' not in corpo))
+    cl_aut = app.test_client()
+    cl_aut.post("/login", data={"email": "giulia.rossi@example.com",
+                                "password": "password123"})
+    corpo_aut = cl_aut.get("/mappa").get_data(as_text=True)
+    esiti.append(("autenticato: proprietario nei dati e stato login",
+                  '"proprietario"' in corpo_aut
+                  and "UTENTE_AUTENTICATO = true" in corpo_aut))
+
     # 4) Raggruppamento: un marcatore per citta'; nessun libro perso
     libri = Libro.cerca()
     marcatori = _raggruppa_per_citta(libri)

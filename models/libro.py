@@ -41,6 +41,43 @@ class Libro:
             conn.close()
 
     @staticmethod
+    def trova_con_proprietario(libro_id):
+        """Restituisce il libro con i dati del proprietario (per la scheda)."""
+        conn = get_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                """
+                SELECT l.*, u.nome AS proprietario_nome,
+                       u.cognome AS proprietario_cognome,
+                       u.citta AS proprietario_citta, u.foto AS proprietario_foto
+                FROM libri l
+                JOIN utenti u ON u.id = l.utente_id
+                WHERE l.id = %s
+                """,
+                (libro_id,),
+            )
+            return cur.fetchone()
+        finally:
+            cur.close()
+            conn.close()
+
+    @staticmethod
+    def imposta_disponibilita(libro_id, disponibile):
+        """Marca il libro come disponibile o meno (gestione prestiti)."""
+        conn = get_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute(
+                "UPDATE libri SET disponibile = %s WHERE id = %s",
+                (disponibile, libro_id),
+            )
+            conn.commit()
+        finally:
+            cur.close()
+            conn.close()
+
+    @staticmethod
     def trova_per_utente(utente_id):
         """Restituisce tutti i libri di un utente, dal piu' recente."""
         conn = get_connection()
@@ -56,11 +93,13 @@ class Libro:
             conn.close()
 
     @staticmethod
-    def aggiorna(libro_id, titolo, autore, anno, descrizione, citta, lat, lon, copertina=None):
+    def aggiorna(libro_id, titolo, autore, anno, descrizione, citta, lat, lon,
+                 disponibile=True, copertina=None):
         """Aggiorna i dati di un libro.
 
         Se 'copertina' e' None la copertina esistente NON viene modificata;
-        se e' una stringa, viene sostituita.
+        se e' una stringa, viene sostituita. 'disponibile' permette al
+        proprietario di rendere o meno il libro prestabile.
         """
         conn = get_connection()
         cur = conn.cursor()
@@ -69,19 +108,23 @@ class Libro:
                 cur.execute(
                     """
                     UPDATE libri
-                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s, lat=%s, lon=%s
+                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s,
+                        lat=%s, lon=%s, disponibile=%s
                     WHERE id=%s
                     """,
-                    (titolo, autore, anno, descrizione, citta, lat, lon, libro_id),
+                    (titolo, autore, anno, descrizione, citta, lat, lon,
+                     disponibile, libro_id),
                 )
             else:
                 cur.execute(
                     """
                     UPDATE libri
-                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s, lat=%s, lon=%s, copertina=%s
+                    SET titolo=%s, autore=%s, anno=%s, descrizione=%s, citta=%s,
+                        lat=%s, lon=%s, disponibile=%s, copertina=%s
                     WHERE id=%s
                     """,
-                    (titolo, autore, anno, descrizione, citta, lat, lon, copertina, libro_id),
+                    (titolo, autore, anno, descrizione, citta, lat, lon,
+                     disponibile, copertina, libro_id),
                 )
             conn.commit()
         finally:
@@ -98,13 +141,16 @@ class Libro:
     )))"""
 
     @staticmethod
-    def cerca(testo=None, lat=None, lon=None, raggio_km=None):
+    def cerca(testo=None, lat=None, lon=None, raggio_km=None,
+              escludi_utente_id=None):
         """Ricerca tra i libri condivisi da tutti gli utenti.
 
         Filtri (combinabili tra loro):
         - testo: ricerca parziale su titolo O autore (operatore LIKE);
         - lat/lon + raggio_km: solo i libri entro 'raggio_km' km dal punto,
-          con la distanza calcolata dalla formula di Haversine inline.
+          con la distanza calcolata dalla formula di Haversine inline;
+        - escludi_utente_id: esclude i libri di quell'utente (chi cerca non
+          deve vedere i propri, ma solo quelli degli altri).
 
         Ogni risultato include nome e cognome del proprietario e, se la
         ricerca e' geospaziale, la colonna calcolata 'distanza_km' (i
@@ -120,9 +166,16 @@ class Libro:
 
         sql = "SELECT " + campi + " FROM libri l JOIN utenti u ON u.id = l.utente_id"
 
+        # Clausole WHERE combinabili (in AND tra loro)
+        condizioni = []
         if testo:
-            sql += " WHERE (l.titolo LIKE %s OR l.autore LIKE %s)"
+            condizioni.append("(l.titolo LIKE %s OR l.autore LIKE %s)")
             parametri.extend(["%" + testo + "%", "%" + testo + "%"])
+        if escludi_utente_id is not None:
+            condizioni.append("l.utente_id <> %s")
+            parametri.append(escludi_utente_id)
+        if condizioni:
+            sql += " WHERE " + " AND ".join(condizioni)
 
         if geospaziale:
             # La colonna calcolata si filtra con HAVING (non e' utilizzabile
